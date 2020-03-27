@@ -1,0 +1,130 @@
+---
+- name: Upgrade all packages to the latest version for Centos
+  yum:
+    name: '*'
+    state: latest
+  when: (ansible_facts['distribution'] == "CentOS")
+  tags: prerequisite
+
+- name: Upgrade all packages to the latest version for Ubuntu
+  apt:
+    name: "*"
+    state: latest
+  when: (ansible_facts['distribution'] == "Ubuntu")
+  tags: prerequisite
+
+- name: Install unzip server packages for Centos
+  yum:
+    name: unzip
+    state: present
+  when: (ansible_facts['distribution'] == "CentOS")
+  register: unzipinstalled
+  tags: prerequisite
+
+- name: Install unzip server packages for Ubuntu
+  apt:
+    name: unzip
+    state: latest
+  when: (ansible_facts['distribution'] == "Ubuntu")
+  register: unzipinstalled
+  tags: prerequisite
+
+- name: Unarchive awscliv2.zip in /root
+  unarchive:
+    src: /home/centos/ansible-playbooks/awscliv2.zip
+    dest: /root
+    owner: root
+    group: root
+    mode: '0755'
+  when: unzipinstalled is succeeded
+  register: unarchived
+  tags: prerequisite
+
+- name: Check if /usr/local/aws-cli exist - Exit if not
+  stat:
+    path: /usr/local/aws-cli
+  when: unarchived is succeeded
+  register: foundedDir
+  tags: prerequisite
+
+- name: Thinking to do
+  debug:
+    msg: "Directory exist. Skipping installation"
+  when: foundedDir.stat.isdir is defined
+  tags: prerequisite
+
+- name: Installing code
+  shell: /root/aws/install
+  when: foundedDir.stat.isdir is not defined
+  become: yes
+  tags: prerequisite
+
+- name: Install bash-completion for Centos
+  yum:
+    name: bash-completion-2.1-6.el7.noarch
+    state: present
+  when: (ansible_facts['distribution'] == "CentOS")
+  tags: prerequisite
+
+- name: Install bash-completion for Ubuntu
+  apt:
+    name: bash-completion
+    state: latest
+  when: (ansible_facts['distribution'] == "Ubuntu")
+  tags: prerequisite
+
+- name: Install cloud-utils for Centos
+  yum:
+    name: cloud-utils
+    state: present
+  when: (ansible_facts['distribution'] == "CentOS")
+  tags: prerequisite
+
+- name: Install cloud-utils for Ubuntu
+  apt:
+    name: cloud-utils
+    state: latest
+  when: (ansible_facts['distribution'] == "Ubuntu")
+  tags: prerequisite
+
+- name: Install haproxy for Centos
+  yum:
+    name: haproxy
+    state: present
+  when: (ansible_facts['distribution'] == "CentOS")
+  tags: prerequisite
+
+- name: Install haproxy for Ubuntu
+  apt:
+    name: haproxy
+    state: latest
+  when: (ansible_facts['distribution'] == "Ubuntu")
+  tags: prerequisite
+
+- name: Install keepalived for Centos
+  yum:
+    name: keepalived.x86_64
+    state: present
+  when: (ansible_facts['distribution'] == "CentOS")
+  tags: prerequisite
+
+- name: Install keepalived for Ubuntu
+  apt:
+    name: keepalived
+    state: latest
+  when: (ansible_facts['distribution'] == "Ubuntu")
+  tags: prerequisite
+
+- name: Upgrade all packages for Centos
+  yum:
+    name: '*'
+    state: latest
+  when: (ansible_facts['distribution'] == "CentOS")
+  tags: prerequisite
+
+- name: Upgrade all packages to the latest version for Ubuntu
+  apt:
+    name: "*"
+    state: latest
+  when: (ansible_facts['distribution'] == "Ubuntu")
+  tags: prerequisite

@@ -1,0 +1,30 @@
+global_defs {
+script_user root
+   }
+
+vrrp_script check_haproxy
+{
+  script "/etc/keepalived/checkHaproxy.sh"   # verify the pid existance
+  interval 5                    # check every 2 seconds
+  weight 2                      # add 2 points of prio if OK
+  rise 2
+}
+
+vrrp_instance VI_1
+{
+  debug 2
+  interface {{ pri_net_int }}                # interface to monitor
+  state BACKUP
+  virtual_router_id 51          # Assign one ID for this route
+  priority 100                  # 101 on master, 100 on backup
+  unicast_src_ip {{ ipubuntu2 }}   # Unicast specific option, this is the IP of the interface keepalived listens on
+  unicast_peer                  # Unicast specific option, this is the IP of the peer instance
+  {
+    {{ ipubuntu1 }}
+  }
+  track_script
+  {
+    check_haproxy
+  }
+  notify /etc/keepalived/failover.sh
+}

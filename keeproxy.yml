@@ -1,0 +1,21 @@
+---
+- hosts: cluster
+  become: yes
+  roles:
+    - { role: cluster_packages, tags: [ 'prerequisite' ] }
+    - { role: cluster_services, tags: [ 'prerequisite' ] }
+
+- hosts: master
+  become: yes
+  roles:
+    - { role: master_keepalived, tags: [ 'configuration' ] }
+
+- hosts: backup
+  become: yes
+  roles:
+    - { role: backup_keepalived, tags: [ 'configuration' ] }
+
+- hosts: cluster
+  become: yes
+  roles:
+    - { role: cluster_start, tags: [ 'start' ] }

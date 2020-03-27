@@ -1,0 +1,10 @@
+hostcentos1: testkeeproxy01
+hostcentos2: testkeeproxy02
+hostubuntu1: testubukeeproxy1
+hostubuntu2: testubukeeproxy2
+ipcentos1: 10.206.210.144
+ipcentos2: 10.206.210.147
+ipubuntu1: 10.206.210.148
+ipubuntu2: 10.206.210.156
+ipvip: 108.128.117.55
+pri_net_int: eth0

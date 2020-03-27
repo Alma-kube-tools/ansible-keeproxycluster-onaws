@@ -1,0 +1,22 @@
+#!/bin/bash
+
+TYPE=$1
+NAME=$2
+STATE=$3
+EIP={{ ipvip }}
+INSTANCE_ID=`ec2metadata --instance-id`
+
+case $STATE in
+    "MASTER") /usr/local/bin/aws ec2 associate-address --public-ip $EIP --instance-id $INSTANCE_ID
+        exit 0
+        ;;
+    "BACKUP") /usr/local/bin/aws ec2 disassociate-address --public-ip $EIP
+        exit 0
+        ;;
+    "FAULT")  /usr/local/bin/aws ec2 disassociate-address --public-ip $EIP
+        exit 0
+        ;;
+    *)        echo "unknown state"
+        exit 1
+        ;;
+esac

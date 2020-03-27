@@ -1,0 +1,22 @@
+---
+- name: Create keepalived config file for Centos
+  become: true
+  template:
+    src: backup-centosconf.j2
+    dest: /etc/keepalived/keepalived.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: (ansible_facts['distribution'] == "CentOS")
+  tags: configuration
+
+- name: Create keepalived config file for Ubuntu
+  become: true
+  template:
+    src: backup-ubuntuconf.j2
+    dest: /etc/keepalived/keepalived.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: (ansible_facts['distribution'] == "Ubuntu")
+  tags: configuration

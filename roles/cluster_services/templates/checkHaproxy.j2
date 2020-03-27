@@ -1,0 +1,13 @@
+#!/bin/bash
+
+PIDHAPROXY=`ps -afe|grep haproxy|grep root|grep -v grep|awk '{print$2}'`
+#echo $PIDHAPROXY
+
+if [ -z "$PIDHAPROXY" ]
+then
+      #echo "haproxy pid is empty"
+      exit 1
+else
+      #echo "haproxy pid is $PIDHAPROXY"
+      exit 0
+fi

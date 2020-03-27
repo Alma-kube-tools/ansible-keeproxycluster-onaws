@@ -1,0 +1,19 @@
+---
+- name: Make sure keepalived is stopped and enabled
+  systemd:
+    name: keepalived
+    enabled: yes
+    state: stopped
+  tags: prerequisite
+
+- name: Make sure haproxy is stopped and enabled
+  systemd:
+    name: haproxy
+    enabled: yes
+    state: stopped
+  tags: prerequisite
+
+- name: Unconditionally reboot the machine with all defaults
+  reboot: 
+  become: yes
+  tags: prerequisite
